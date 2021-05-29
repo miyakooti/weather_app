@@ -35,6 +35,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         table.register(WeatherTableViewCell.nib(), forCellReuseIdentifier: WeatherTableViewCell.identifier)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setupLocation()
+    }
+    
     func setupLocation() {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -52,6 +57,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func requestWeatherForLocation() {
         let long = currentLocation?.coordinate.longitude
         let lat = currentLocation?.coordinate.latitude
+        print(long, lat)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
