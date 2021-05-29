@@ -21,6 +21,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
 
     
+    @IBOutlet weak var label: UILabel!
+    
     @IBOutlet var table: UITableView!
     
     var models = [Weather]()
@@ -81,17 +83,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             
             // convert data to models/some object
-            var json: Weather?
+            var weatherInstance: WeatherModel?
             do {
                 let decoder = JSONDecoder()
-                let weather = try decoder.decode(WeatherModel.self, from: data)
-                print(weather)
+                weatherInstance = try decoder.decode(WeatherModel.self, from: data)
+//                print(weather)
             } catch {
                 print("jsonのデコードに失敗しました：", error)
             }
+            print("today's weather:", weatherInstance?.weather[0].main)  // これコンソールにはoptionalって付いてるけど、たぶんラベルとかに出力するときはつかないよね。
+            
+            // update UI
+            self.label.text = "it is \(weatherInstance?.weather[0].main)."
         }
         
-        // update UI
             
     }
     
@@ -100,6 +105,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.identifier, for: indexPath) as! WeatherTableViewCell
         return UITableViewCell()
     }
     
