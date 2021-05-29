@@ -19,7 +19,6 @@ import Alamofire
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
     
-    let apiKey = "yourApiKey"
 
     
     @IBOutlet var table: UITableView!
@@ -68,7 +67,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         
         // make URL
-        let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(lat)&lon=\(lon)&APPID=\(apiKey)"
+        let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(lat)&lon=\(lon)&APPID=\(Sensitive.apiKey)"
         print(urlString)
         
         // throw request
@@ -82,6 +81,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             
             // convert data to models/some object
+            var json: Weather?
             do {
                 let decoder = JSONDecoder()
                 let weather = try decoder.decode(WeatherModel.self, from: data)
