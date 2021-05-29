@@ -10,14 +10,17 @@
 // tableview
 // custom cell: collection view
 // api
+// dark sky mapの代わりに、open weather mapというものを使用。
 
 
 import UIKit
 import CoreLocation
+import Alamofire
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
-
     
+    let apiKey = "1070da3b8e203179945bdc61a8f95745"
+
     
     @IBOutlet var table: UITableView!
     
@@ -26,7 +29,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let locationManager = CLLocationManager()
     
     var currentLocation: CLLocation?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,9 +58,41 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func requestWeatherForLocation() {
-        let long = currentLocation?.coordinate.longitude
-        let lat = currentLocation?.coordinate.latitude
-        print(long, lat)
+        guard currentLocation != nil else {
+            print("え")
+            return
+        }
+        let lon = currentLocation!.coordinate.longitude
+        let lat = currentLocation!.coordinate.latitude
+        print(lon, lat)  // 座標を取得できました
+        
+        
+        // make URL
+        let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(lat)&lon=\(lon)&APPID=\(apiKey)"
+        print(urlString)
+        
+        // throw request
+        let request = AF.request(urlString)
+        request.responseJSON { (response) in
+            
+            // validation of response data
+            guard let data = response.data else {
+                print("error in URLSession")
+                return
+            }
+            
+            // convert data to models/some object
+            do {
+                let decoder = JSONDecoder()
+                let weather = try decoder.decode(WeatherModel.self, from: data)
+                print(weather)
+            } catch {
+                print("jsonのデコードに失敗しました：", error)
+            }
+        }
+        
+        // update UI
+            
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -73,7 +108,3 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 }
 
-
-struct Weather {
-    
-}
