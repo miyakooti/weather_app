@@ -19,7 +19,7 @@ import Alamofire
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
     
-    let apiKey = "1070da3b8e203179945bdc61a8f95745"
+    let apiKey = "yourApiKey"
 
     
     @IBOutlet var table: UITableView!
